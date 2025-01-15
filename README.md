@@ -32,8 +32,8 @@ A Linux kernel module to monitor and restrict USB device connections based on dy
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/usb-device-guard.git
-   cd usb-device-guard
+   git clone https://github.com/pnasis/USB-Device-Guard-Driver.git
+   cd USB-Device-Guard-Driver
    ```
 
 2. **Build the Module**:
@@ -96,6 +96,39 @@ dmesg | tail -n 20
 - `Makefile`: Build script for compiling and managing the kernel module.
 - `README.md`: Documentation for the project.
 
+### Makefile Functionality
+The `Makefile` provides the following targets:
+
+- **Build the Module**:
+  ```bash
+  make
+  ```
+  Compiles the kernel module.
+
+- **Clean Up Build Artifacts**:
+  ```bash
+  make clean
+  ```
+  Removes all generated files.
+
+- **Load the Module**:
+  ```bash
+  make load
+  ```
+  Loads the kernel module into the system.
+
+- **Unload the Module**:
+  ```bash
+  make unload
+  ```
+  Unloads the kernel module from the system.
+
+- **View Logs**:
+  ```bash
+  make logs
+  ```
+  Displays the last 20 kernel log entries for debugging.
+
 ### Dynamic Rule Management
 Rules are stored dynamically in the kernel and managed through the sysfs interface:
 - **Add Rule**: Write `VID PID` to `/sys/class/usbguard/add_rule`.
@@ -131,16 +164,19 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 ---
 
 ## License
-This project is licensed under the [GPL v3](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).
+This project is licensed under the [GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
 ---
 
 ## Author
-- **Prodromos Nasis** - [Your GitHub Profile](https://github.com/pnasis)
+- **Prodromos Nasis** - [pnasis](https://github.com/pnasis)
 
 ---
 
 ## Acknowledgments
 - Linux Kernel Development Documentation.
 - Open-source contributors and community resources.
+
+
+
 
