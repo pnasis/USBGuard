@@ -17,8 +17,8 @@ static int rule_count = 0;
 static struct class *usbguard_class;
 
 // Add rule via sysfs
-static ssize_t add_rule_store(struct class *cls, struct class_attribute *attr,
-                               const char *buf, size_t count) {
+static ssize_t add_rule_store(const struct class *cls, const struct class_attribute *attr,
+                              const char *buf, size_t count) {
     int vid, pid;
 
     if (rule_count >= MAX_RULES) {
@@ -71,7 +71,7 @@ static int usbguard_probe(struct usb_interface *interface,
     }
 
     // Check device class (e.g., USB storage)
-    if (udev->descriptor.bDeviceClass == USB_CLASS_STORAGE) {
+    if (udev->descriptor.bDeviceClass == USB_CLASS_MASS_STORAGE) {
         printk(KERN_INFO "USBGuard: USB storage device detected.\n");
     }
 
@@ -120,7 +120,7 @@ static int __init usbguard_init(void) {
     }
 
     // Create sysfs interface
-    usbguard_class = class_create(THIS_MODULE, "usbguard");
+    usbguard_class = class_create("usbguard");
     if (IS_ERR(usbguard_class)) {
         usb_deregister(&usbguard_driver);
         return PTR_ERR(usbguard_class);
@@ -147,6 +147,6 @@ static void __exit usbguard_exit(void) {
 module_init(usbguard_init);
 module_exit(usbguard_exit);
 
-MODULE_LICENSE("GPL");
+MODULE_LICENSE("GPL v3");
 MODULE_AUTHOR("pnasis");
 MODULE_DESCRIPTION("USB Device Guard with Dynamic Rules and Advanced Checks");
