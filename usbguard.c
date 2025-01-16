@@ -147,6 +147,6 @@ static void __exit usbguard_exit(void) {
 module_init(usbguard_init);
 module_exit(usbguard_exit);
 
-MODULE_LICENSE("GPL v3");
+MODULE_LICENSE("GPL");
 MODULE_AUTHOR("pnasis");
 MODULE_DESCRIPTION("USB Device Guard with Dynamic Rules and Advanced Checks");
