@@ -96,39 +96,6 @@ dmesg | tail -n 20
 - `Makefile`: Build script for compiling and managing the kernel module.
 - `README.md`: Documentation for the project.
 
-### Makefile Functionality
-The `Makefile` provides the following targets:
-
-- **Build the Module**:
-  ```bash
-  make
-  ```
-  Compiles the kernel module.
-
-- **Clean Up Build Artifacts**:
-  ```bash
-  make clean
-  ```
-  Removes all generated files.
-
-- **Load the Module**:
-  ```bash
-  make load
-  ```
-  Loads the kernel module into the system.
-
-- **Unload the Module**:
-  ```bash
-  make unload
-  ```
-  Unloads the kernel module from the system.
-
-- **View Logs**:
-  ```bash
-  make logs
-  ```
-  Displays the last 20 kernel log entries for debugging.
-
 ### Dynamic Rule Management
 Rules are stored dynamically in the kernel and managed through the sysfs interface:
 - **Add Rule**: Write `VID PID` to `/sys/class/usbguard/add_rule`.
