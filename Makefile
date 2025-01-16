@@ -1,27 +1,16 @@
-# Makefile for USB Device Guard Driver
+# Define the module name
+obj-m := usbguard.o
 
-# Specify the kernel build directory
+# Define the kernel build directory
 KDIR := /lib/modules/$(shell uname -r)/build
 
-# Name of the module
-MODULE := usbguard
+# Define the current directory
+PWD := $(shell pwd)
 
 # Default target
 all:
 	$(MAKE) -C $(KDIR) M=$(PWD) modules
 
-# Clean up
+# Clean target
 clean:
 	$(MAKE) -C $(KDIR) M=$(PWD) clean
-
-# Load the module
-load:
-	sudo insmod $(MODULE).ko
-
-# Unload the module
-unload:
-	sudo rmmod $(MODULE)
-
-# Show kernel logs (for debugging)
-logs:
-	dmesg | tail -n 20
