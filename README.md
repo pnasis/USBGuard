@@ -1,34 +1,29 @@
-# USB Device Guard Driver
+# USBGuard Kernel Module
 
-A Linux kernel module to monitor and restrict USB device connections based on dynamically configurable rules. This project is aimed at enhancing system security by allowing only authorized USB devices to connect.
+## Overview
+The **USBGuard Kernel Module** is a Linux kernel module that provides a robust mechanism to monitor and restrict USB device connections. It allows dynamic configuration of rules to authorize or block USB devices based on their Vendor ID (VID), Product ID (PID), class, or serial number. The module integrates with `sysfs` for user interaction and logs all connection and disconnection events.
 
 ---
 
 ## Features
-
-### Core Features
-1. **Dynamic Rule Management**:
-   - Add or remove rules for allowed USB devices using Vendor ID (VID) and Product ID (PID).
-   - Configuration via sysfs interface.
-
-2. **Advanced Device Checks**:
-   - Restrict USB devices based on:
-     - Device Class (e.g., USB storage, keyboards).
-     - Serial Numbers or Unique Device IDs.
-
-3. **Logging and Alerts**:
-   - Kernel logs for allowed and blocked USB device events.
+1. **Dynamic Rule Configuration**: Add allowed VID/PID rules dynamically via a `sysfs` interface.
+2. **Advanced USB Checks**:
+  - Block USB devices based on their VID/PID.
+  - Identify and block USB devices based on specific serial numbers.
+  - Detect and monitor USB device classes, such as USB mass storage.
+3. **Security Enforcement**:
+  - Unauthorized USB devices are blocked during the connection phase.
+  - Logs unauthorized connection attempts for auditing.
+4. **Lightweight Design**: Integrates seamlessly with the Linux kernel.
 
 ---
 
-## Getting Started
+## Requirements
+- Linux kernel version 4.0 or later.
+- Root privileges for loading/unloading the module and interacting with `sysfs`.
 
-### Prerequisites
-- A Linux distribution with kernel headers installed.
-- Basic knowledge of compiling and loading kernel modules.
-- USB devices for testing (both allowed and blocked).
 
-### Setup
+## Installation
 
 1. **Clone the Repository**:
    ```bash
@@ -46,72 +41,78 @@ A Linux kernel module to monitor and restrict USB device connections based on dy
    sudo insmod usbguard.ko
    ```
 
-4. **Verify Kernel Logs**:
-   ```bash
-   dmesg | tail
-   ```
-
-5. **Add Rules**:
-   Add a new rule using sysfs to allow a specific USB device:
-   ```bash
-   echo "0x1234 0x5678" > /sys/class/usbguard/add_rule
-   ```
-   - Replace `0x1234` with the VID and `0x5678` with the PID of your device.
-
-6. **Test the Driver**:
-   - Connect USB devices and monitor logs for access decisions.
-
+4. **Verify the Module**:
+Check if the module is loaded using:
+```bash
+lsmod | grep usbguard
+```
+   
 ---
 
 ## Usage
 
 ### Adding Rules
-To dynamically add rules for allowed USB devices:
-```bash
-echo "<VID> <PID>" > /sys/class/usbguard/add_rule
-```
+
+To add a rule for allowing a specific USB device (based on VID/PID), use the `add_rule` attribute provided via `sysfs`.
+Format: `VID PID` (in hexadecimal format).
+
 Example:
 ```bash
-echo "0x0781 0x5567" > /sys/class/usbguard/add_rule
+echo "1234 5678" > /sys/class/usbguard/add_rule
 ```
 
-### Removing the Module
-To remove the kernel module:
+### Logging
+The module logs events to the kernel log. Use dmesg to view connection, disconnection, and validation logs:
+```bash
+dmesg | grep USBGuard
+```
+
+### Unloading the Module
+To remove the module from the kernel:
 ```bash
 sudo rmmod usbguard
 ```
 
-### Viewing Logs
-To see recent kernel logs related to the module:
-```bash
-dmesg | tail -n 20
-```
-
 ---
 
-## Implementation Details
-
-### File Structure
+## File Structure
 - `usbguard.c`: Main source file containing the kernel module implementation.
 - `Makefile`: Build script for compiling and managing the kernel module.
 - `README.md`: Documentation for the project.
+
+---
+
+## Architecture
+
+### Rule Management
+- Rules are stored as arrays of VIDs and PIDs in the kernel memory.
+- The `sysfs` interface (`/sys/class/usbguard/add_rule`) allows users to dynamically add rules.
+
+### USB Event Handling
+- **Probe Function**: Triggered when a USB device is connected. Performs rule matching and advanced checks (class and serial number).
+- **Disconnect Function**: Triggered when a USB device is disconnected. Logs the event.
+
+### Logging and Security
+- Logs unauthorized connection attempts and authorized device connections.
+- Blocks devices based on matching rules, class checks, or blocked serial numbers.
+
 
 ### Dynamic Rule Management
 Rules are stored dynamically in the kernel and managed through the sysfs interface:
 - **Add Rule**: Write `VID PID` to `/sys/class/usbguard/add_rule`.
 - **Rule Matching**: Each connected device is checked against the stored rules.
 
-### Advanced Device Checks
-The module performs additional checks for:
-1. **Device Classes**:
-   - Example: USB storage (class 08), keyboards (class 03).
-2. **Serial Numbers**:
-   - Matches serial numbers against a blocklist (e.g., `BLOCKED_SERIAL`).
+---
+
+### Limitations
+- The maximum number of rules is currently set to **10** (`MAX_RULES`).
+- Rules are not persistent across reboots. They need to be re-added after a module reload.
+- Only VID/PID, device class, and serial number are checked.
 
 ---
 
 ## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
+Contributions to enhance functionality, performance, or compatibility are welcome! Please open an issue or submit a pull request.
 
 1. Fork the repository.
 2. Create a new branch:
