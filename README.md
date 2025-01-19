@@ -132,7 +132,7 @@ Contributions to enhance functionality, performance, or compatibility are welcom
 ---
 
 ## License
-This project is licensed under the [GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+This project is licensed under the [GPL v2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
 ---
 
