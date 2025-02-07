@@ -133,17 +133,4 @@ Contributions to enhance functionality, performance, or compatibility are welcom
 ## License
 This project is licensed under the [GPL v2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
----
-
-## Author
-- **Prodromos Nasis** - [pnasis](https://github.com/pnasis)
-
----
-
-## Acknowledgments
-- Linux Kernel Development Documentation.
-- Open-source contributors and community resources.
-
-
-
 
