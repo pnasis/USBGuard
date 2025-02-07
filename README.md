@@ -43,9 +43,9 @@ The **USBGuard Kernel Module** is a Linux kernel module that provides a robust m
 
 4. **Verify the Module**:
 Check if the module is loaded using:
-```bash
-lsmod | grep usbguard
-```
+   ```bash
+   lsmod | grep usbguard
+   ```
    
 ---
 
