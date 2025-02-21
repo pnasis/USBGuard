@@ -1,0 +1,21 @@
+# USBGuard Rules File
+# --------------------
+# This file contains a list of allowed USB devices based on their Vendor ID (VID) and Product ID (PID).
+# Each entry should be in the format: VID PID
+# VID = Vendor ID (4-digit hexadecimal number)
+# PID = Product ID (4-digit hexadecimal number)
+#
+# Lines starting with '#' are comments and will be ignored.
+#
+# Example entries:
+
+# Allow a standard keyboard (example VID/PID)
+04d9 1702
+
+# Allow a specific USB flash drive (example VID/PID)
+0781 5567
+
+# Allow a Logitech mouse (example VID/PID)
+046d c077
+
+# Add more devices below following the format VID PID
