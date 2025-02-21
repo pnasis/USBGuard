@@ -13,6 +13,12 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+# Copy predefined rules file if it does not already exist
+if [[ ! -f "$RULES_FILE" ]]; then
+    echo "Copying predefined usbguard rules file..."
+    cp usbguard.rules "$RULES_FILE"
+fi
+
 # Build the kernel module
 make clean
 make
@@ -28,12 +34,6 @@ depmod
 
 # Load the module
 modprobe "$MODULE_NAME"
-
-# Copy predefined rules file if it does not already exist
-if [[ ! -f "$RULES_FILE" ]]; then
-    echo "Copying predefined usbguard rules file..."
-    cp usbguard.rules "$RULES_FILE"
-fi
 
 # Ensure module loads at boot
 echo "$MODULE_NAME" > /etc/modules-load.d/usbguard.conf
