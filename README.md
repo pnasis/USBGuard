@@ -7,21 +7,23 @@ The **USBGuard Kernel Module** is a Linux kernel module that provides a robust m
 
 ## Features
 1. **Dynamic Rule Configuration**: Add allowed VID/PID rules dynamically via a `sysfs` interface.
-2. **Advanced USB Checks**:
-  - Block USB devices based on their VID/PID.
-  - Identify and block USB devices based on specific serial numbers.
-  - Detect and monitor USB device classes, such as USB mass storage.
-3. **Security Enforcement**:
-  - Unauthorized USB devices are blocked during the connection phase.
-  - Logs unauthorized connection attempts for auditing.
-4. **Lightweight Design**: Integrates seamlessly with the Linux kernel.
+2. **Rule File Support**:
+   - Reads allowed USB devices from `/etc/usbguard.rules`.
+   - Supports comments and empty lines for better organization.
+3. **Advanced USB Checks**:
+   - Block USB devices based on their VID/PID.
+   - Identify and block USB devices based on specific serial numbers.
+   - Detect and monitor USB device classes, such as USB mass storage.
+4. **Security Enforcement**:
+   - Unauthorized USB devices are blocked during the connection phase.
+   - Logs unauthorized connection attempts for auditing.
+5. **Lightweight Design**: Integrates seamlessly with the Linux kernel.
 
 ---
 
 ## Requirements
 - Linux kernel version 4.0 or later.
 - Root privileges for loading/unloading the module and interacting with `sysfs`.
-
 
 ## Installation
 
@@ -36,32 +38,43 @@ The **USBGuard Kernel Module** is a Linux kernel module that provides a robust m
    make
    ```
 
-3. **Load the Module**:
+3. **Install the Module and Setup Environment**:
    ```bash
-   sudo insmod usbguard.ko
+   sudo ./install.sh
    ```
 
 4. **Verify the Module**:
    ```bash
    lsmod | grep usbguard
    ```
-   
+
 ---
 
 ## Usage
 
+### Using the Install Script
+The `install.sh` script automates the installation process:
+- Builds the module.
+- Loads the module into the kernel.
+- Copies the default rule file to `/etc/usbguard.rules`.
+
+To run the script:
+```bash
+sudo ./install.sh
+```
+
 ### Adding Rules
 
-To add a rule for allowing a specific USB device (based on VID/PID), use the `add_rule` attribute provided via `sysfs`.
-Format: `VID PID` (in hexadecimal format).
+To add a rule for allowing a specific USB device (based on VID/PID), edit `/etc/usbguard.rules`:
 
 Example:
 ```bash
-echo "1234 5678" > /sys/class/usbguard/add_rule
+# Allow specific USB device
+1234 5678
 ```
 
 ### Logging
-The module logs events to the kernel log. Use dmesg to view connection, disconnection, and validation logs:
+The module logs events to the kernel log. Use `dmesg` to view connection, disconnection, and validation logs:
 ```bash
 dmesg | grep USBGuard
 ```
@@ -77,6 +90,8 @@ sudo rmmod usbguard
 ## File Structure
 - `usbguard.c`: Main source file containing the kernel module implementation.
 - `Makefile`: Build script for compiling and managing the kernel module.
+- `usbguard.rules`: Default rule file with sample configurations.
+- `install.sh`: Installation script to set up the environment and copy necessary files.
 - `README.md`: Documentation for the project.
 
 ---
@@ -84,8 +99,9 @@ sudo rmmod usbguard
 ## Architecture
 
 ### Rule Management
-- Rules are stored as arrays of VIDs and PIDs in the kernel memory.
-- The `sysfs` interface (`/sys/class/usbguard/add_rule`) allows users to dynamically add rules.
+- Rules are loaded from `/etc/usbguard.rules` on module initialization.
+- The file supports comments (lines starting with `#`) and empty lines.
+- Rules define allowed USB devices using VID/PID format.
 
 ### USB Event Handling
 - **Probe Function**: Triggered when a USB device is connected. Performs rule matching and advanced checks (class and serial number).
@@ -95,17 +111,16 @@ sudo rmmod usbguard
 - Logs unauthorized connection attempts and authorized device connections.
 - Blocks devices based on matching rules, class checks, or blocked serial numbers.
 
-
 ### Dynamic Rule Management
-Rules are stored dynamically in the kernel and managed through the sysfs interface:
-- **Add Rule**: Write `VID PID` to `/sys/class/usbguard/add_rule`.
+Rules are stored dynamically in the kernel and managed through the rule file:
+- **Rule File Loading**: Rules are read from `/etc/usbguard.rules`.
 - **Rule Matching**: Each connected device is checked against the stored rules.
 
 ---
 
 ### Limitations
 - The maximum number of rules is currently set to **10** (`MAX_RULES`).
-- Rules are not persistent across reboots. They need to be re-added after a module reload.
+- Rules must be manually updated in `/etc/usbguard.rules`.
 - Only VID/PID, device class, and serial number are checked.
 
 ---
@@ -132,5 +147,3 @@ Contributions to enhance functionality, performance, or compatibility are welcom
 
 ## License
 This project is licensed under the [GPL v2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
-
-
