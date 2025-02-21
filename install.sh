@@ -13,6 +13,8 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+echo "Installing USBGuard kernel module..."
+
 # Copy predefined rules file if it does not already exist
 if [[ ! -f "$RULES_FILE" ]]; then
     echo "Copying predefined usbguard rules file..."
@@ -36,7 +38,7 @@ depmod
 modprobe "$MODULE_NAME"
 
 # Ensure module loads at boot
-echo "$MODULE_NAME" > /etc/modules-load.d/usbguard.conf
+echo "$MODULE_NAME" | tee -a /etc/modules > /dev/null
 
 # Done
 echo "USBGuard module installed and configured successfully."
