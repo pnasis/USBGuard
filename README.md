@@ -33,17 +33,12 @@ The **USBGuard Kernel Module** is a Linux kernel module that provides a robust m
    cd USB-Device-Guard-Driver
    ```
 
-2. **Build the Module**:
-   ```bash
-   make
-   ```
-
-3. **Install the Module and Setup Environment**:
+2. **Install the Module and Setup Environment**:
    ```bash
    sudo ./install.sh
    ```
 
-4. **Verify the Module**:
+3. **Verify the Module**:
    ```bash
    lsmod | grep usbguard
    ```
