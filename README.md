@@ -22,7 +22,7 @@ The **USBGuard Kernel Module** is a Linux kernel module that provides a robust m
 ---
 
 ## Requirements
-- Linux kernel version 4.0 or later.
+- Linux kernel version 4.0 or later (Tested on kernel 6.12.11).
 - Root privileges for loading/unloading the module and interacting with `sysfs`.
 
 ## Installation
