@@ -1,5 +1,5 @@
 /*
- * USBGuard Kernel Module (Updated Version)
+ * USBGuard Kernel Module
  *
  * This module reads allowed USB device rules from /etc/usbguard.rules
  * and enforces them during device connection.
